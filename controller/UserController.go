@@ -5,6 +5,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"golang.org/x/crypto/bcrypt"
 	"lee/ginessential/common"
+	"lee/ginessential/dto"
 	"lee/ginessential/model"
 	"lee/ginessential/util"
 	"log"
@@ -140,7 +141,7 @@ func Info(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"code": 200,
 		"data": gin.H{
-			"user": user,
+			"user": dto.ToUserDto(user.(model.User)),
 		},
 	})
 }
