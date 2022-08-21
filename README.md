@@ -12,4 +12,11 @@
 
 5. 相关接口地址在routes.go文件中
 
-   
+### 各个文件作用
+1. `common`文件夹
+   1. database.go  连接数据库操作，具体的数值映射到`config`下的application.yml中
+   2. jwt.go  
+
+
+### 前端vue版本
+1. npm install -g add @vue/cli@4.5.13
