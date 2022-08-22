@@ -1,3 +1,5 @@
+server:
+  port: 9090
 datasource:
   driverName: mysql
   host: 127.0.0.1
