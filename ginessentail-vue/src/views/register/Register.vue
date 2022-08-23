@@ -47,6 +47,8 @@
 import { required, minLength } from 'vuelidate/lib/validators';
 
 import customValidator from '@/helper/validator';
+import userService from '@/utils/userService';
+import storageService from '../../service/storageService';
 
 export default {
   data() {
@@ -88,14 +90,15 @@ export default {
         return;
       }
       // 请求api
-      const api = 'http://localhost:9090/api/auth/register';
-      this.axios.post(api, { ...this.user }).then((res) => {
+      userService.register(this.user).then((res) => {
         // 保存token，使用本地的localStorage进行保存
-        console.log(res.data);
-        localStorage.setItem('token', res.data.data.token);
-
-        // 跳转主页
-        this.$router.replace({ name: 'login' });
+        storageService.set(storageService.USER_TOKEN, res.data.data.token);
+        userService.info().then((response) => {
+          // 保存用户信息
+          storageService.set(storageService.USER_INFO, JSON.stringify(response.data.data.user));
+          // 跳转主页
+          this.$router.replace({ name: 'Home' });
+        });
       }).catch((err) => {
         this.$bvToast.toast(err.response.data.msg, {
           title: '数据验证错误',

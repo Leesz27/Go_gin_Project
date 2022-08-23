@@ -2,7 +2,7 @@
 <div>
   <b-navbar toggleable="lg" type="dark" variant="info">
     <b-container>
-    <b-navbar-brand href="#">LeeLearn</b-navbar-brand>
+    <b-navbar-brand @click="$router.push({name: 'Home' })">LeeLearn</b-navbar-brand>
 
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -15,15 +15,19 @@
           <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
         </b-nav-form> -->
 
-        <!-- <b-nav-item-dropdown right>
+        <b-nav-item-dropdown right v-if="userInfo">
           <template #button-content>
-            <em>User</em>
+            <em>{{userInfo.name}}</em>
           </template>
-          <b-dropdown-item href="#">Profile</b-dropdown-item>
+          <b-dropdown-item href="#">个人主页</b-dropdown-item>
           <b-dropdown-item href="#">Sign Out</b-dropdown-item>
-        </b-nav-item-dropdown> -->
-        <b-nav-item @click="$router.replace({name: 'login'})">登录</b-nav-item>
-        <b-nav-item @click="$router.replace({name: 'register'})">注册</b-nav-item>
+        </b-nav-item-dropdown>
+        <div v-if="!userInfo">
+          <b-nav-item v-if="$route.name != 'login'"
+          @click="$router.replace({name: 'login'})">登录</b-nav-item>
+          <b-nav-item v-if="$route.name != 'register'"
+          @click="$router.replace({name: 'register'})">注册</b-nav-item>
+        </div>
       </b-navbar-nav>
     </b-collapse>
     </b-container>
@@ -31,8 +35,14 @@
 </div>
 </template>
 <script>
-export default {
+import storageService from '@/service/storageService';
 
+export default {
+  computed: {
+    userInfo() {
+      return JSON.parse(storageService.get(storageService.userInfo));
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
