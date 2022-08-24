@@ -96,6 +96,7 @@ export default {
         userService.info().then((response) => {
           // 保存用户信息
           storageService.set(storageService.USER_INFO, JSON.stringify(response.data.data.user));
+          console.log(response.data.data.user);
           // 跳转主页
           this.$router.replace({ name: 'Home' });
         });

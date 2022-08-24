@@ -16,7 +16,7 @@
         </b-nav-form> -->
 
         <b-nav-item-dropdown right v-if="userInfo">
-          <template #button-content>
+          <template v-slot:button-content>
             <em>{{userInfo.name}}</em>
           </template>
           <b-dropdown-item href="#">个人主页</b-dropdown-item>
@@ -40,7 +40,7 @@ import storageService from '@/service/storageService';
 export default {
   computed: {
     userInfo() {
-      return JSON.parse(storageService.get(storageService.userInfo));
+      return JSON.parse(storageService.get(storageService.USER_INFO));
     },
   },
 };
