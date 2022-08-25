@@ -44,11 +44,11 @@
   </div>
 </template>
 <script>
-import { required, minLength } from 'vuelidate/lib/validators';
 
 import customValidator from '@/helper/validator';
-import userService from '@/utils/userService';
-import storageService from '../../service/storageService';
+
+import { required, minLength } from 'vuelidate/lib/validators';
+import { mapActions } from 'vuex';
 
 export default {
   data() {
@@ -78,6 +78,8 @@ export default {
   },
 
   methods: {
+    ...mapActions('userModule', { userRegister: 'register' }),
+    // ...mapMutations('userModule', ['SET_TOKEN', 'SET_USERINFO']),
     validateState(name) {
       // 这里是es6 解构赋值
       const { $dirty, $error } = this.$v.user[name];
@@ -90,16 +92,9 @@ export default {
         return;
       }
       // 请求api
-      userService.register(this.user).then((res) => {
-        // 保存token，使用本地的localStorage进行保存
-        storageService.set(storageService.USER_TOKEN, res.data.data.token);
-        userService.info().then((response) => {
-          // 保存用户信息
-          storageService.set(storageService.USER_INFO, JSON.stringify(response.data.data.user));
-          console.log(response.data.data.user);
-          // 跳转主页
-          this.$router.replace({ name: 'Home' });
-        });
+      this.userRegister(this.user).then(() => {
+        // 跳转主页
+        this.$router.replace({ name: 'Home' });
       }).catch((err) => {
         this.$bvToast.toast(err.response.data.msg, {
           title: '数据验证错误',
